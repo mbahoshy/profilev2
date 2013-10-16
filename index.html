@@ -1,0 +1,129 @@
+<html>
+<head>
+	<link rel='stylesheet' href='index.css'	/>
+	<script src='http://code.jquery.com/jquery-1.9.1.js'></script>
+	<script type="text/javascript" src="ejs_production.js"></script>
+	<script>
+
+	
+	var links = {
+	'main': [
+		{ "text":"Link 1" , "data":"direction1" },
+		{ "text":"Link 2" , "data":"direction2" },
+		{ "text":"Link 3" , "data":"direction3" }
+	],
+	
+	
+	'webdev': [
+		{ "text":"Link 1" , "data":"direction1w" },
+		{ "text":"Link 2" , "data":"direction2w" },
+		{ "text":"Link 3" , "data":"direction3w" }
+	],
+
+	'videos': [
+		{ "text":"Link 1" , "data":"direction1v" },
+		{ "text":"Link 2" , "data":"direction2v" },
+		{ "text":"Link 3" , "data":"direction3v" }
+	],
+
+	'resume': [
+		{ "text":"Link 1" , "data":"direction1r" },
+		{ "text":"Link 2" , "data":"direction2r" },
+		{ "text":"Link 3" , "data":"direction3r" }
+	]
+}
+
+	$(document).ready(function() {
+		$('#navigation').on('click', '.option', (function(){
+			//swap classes
+			$(this).removeClass('option').addClass('active');
+
+			//set width
+			$('.active').css('width', '90%');
+			//get posistion of active class
+			var p = $(this).position();
+			
+			//get position of each option class and assign css values
+			$('.option').each(function(){
+				var o = $(this).position();
+				$(this).css({'top': o.top, 'left': o.left});
+			});
+			//change position to absolute
+			$('.active').css({'top': p.top, 'left': p.left});
+			$('.active, .option').css('position', 'absolute');
+			
+			//animate options, activate clases
+			$('.option').animate({'opacity': 0}, 400, function(){});
+			$('.active').animate({'top': 0}, 400, function(){});
+
+			//load ejs template and insert html
+			var html = new EJS({url: 'body.ejs'}).render();
+			$('#content').html(html).fadeIn(600);
+
+			//load sub-navigation
+			var suburl = $(this).data('subnav');
+			var subnav = new EJS({url: 'subnav.ejs'}).render(links[suburl]);
+			$('#navigation').append(subnav);
+			
+			$('.active').on('click.return', (function(){	
+					$('.active').animate({
+						'top': p.top,
+						'left': p.left
+					}, 400, function(){
+						$('.active').addClass('option').removeClass('active');
+						$('.option').css('position', 'static');
+						$(this).trigger('mouseleave');
+					});
+					
+					$('#content').fadeOut(400);
+					$('.option').animate({'opacity': 1}, 400, function(){});
+					$('.active').off('click.return');
+				}));		
+
+		}));
+		
+		$('.option').each(function(){
+			$(this).data('width', $(this).width());
+			$(this).data('animate', false);
+		
+		});
+		$('#navigation').on('mouseenter', '.option', (function () {
+			if($(this).data('animate') == false) {
+				$(this).data('animate', true);
+				$(this).animate({'width': '90%'}, 300, function(){$(this).data('animate', false);});
+				
+			}		
+		}));
+		
+		$('#navigation').on('mouseleave', '.option', (function() {
+				$(this).animate({'width': $(this).data('width')}, 200, function(){});
+		}));
+
+		
+	});
+	</script>
+</head>
+<body>
+    <div id="wrapper">
+         <!-- the sidebar -->
+         <div id="sidebar">
+			<h1>mbahoshy.com</h1>
+		   <div id="navigation">
+             <ul class='mainnav'>
+               <li class='option' data-subnav='main'>matthew ross</li>
+               <li class='option' data-subnav='webdev'>web development</li>
+               <li class='option' data-subnav='videos'>videos</li>
+               <li class='option' data-subnav='resume'>resume</li>
+             </ul>
+           </div>
+         </div>
+         <!-- the content -->
+         <div id="content">
+         </div>
+         <!-- the footer -->
+         <div id="footer">
+           <p>Here is the footer</p>
+         </div>
+    </div>
+</body>
+</html>
