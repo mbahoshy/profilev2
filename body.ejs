@@ -1,4 +1,5 @@
-<h1>TESTER</h1>
-<div class='column3'><p>This is column 1. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool.</p></div>
-<div class='column3'><p>This is column 2. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool.</p></div>
-<div class='column3'><p>This is column 3. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool.</p></div>
+<h2>a title</h2>
+
+	<% for(var i=0; i<this.length; i++) { %>
+            <div class='column3'><p><%= this[i].content %></p></div>
+    <% } %>

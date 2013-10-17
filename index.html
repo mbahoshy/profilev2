@@ -31,7 +31,35 @@
 		{ "text":"Link 2" , "data":"direction2r" },
 		{ "text":"Link 3" , "data":"direction3r" }
 	]
-}
+	}
+
+	var content = {
+	'main': [
+		{"content": "This is column 1 main. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 2 main. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 3 main. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."}
+	],
+
+	'webdev': [
+		{"content": "This is column 1 webdev. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 2 webdev. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 3 webdev. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."}
+	],
+
+	'videos': [
+		{"content": "This is column 1 videos. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 2 videos. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 3 videos. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."}
+	],
+
+	'resume': [
+		{"content": "This is column 1 resume. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 2 resume. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."},
+		{"content": "This is column 3 resume. We must put a full text in here so that it will fill up more than one column. I am just city here watching e 60. hahaha it is not that funny but i need more to write tyson is a tool."}
+	]
+
+
+	}
 
 	$(document).ready(function() {
 		$('#navigation').on('click', '.option', (function(){
@@ -40,6 +68,7 @@
 
 			//set width
 			$('.active').css('width', '90%');
+
 			//get posistion of active class
 			var p = $(this).position();
 			
@@ -53,19 +82,21 @@
 			$('.active, .option').css('position', 'absolute');
 			
 			//animate options, activate clases
-			$('.option').animate({'opacity': 0}, 400, function(){});
-			$('.active').animate({'top': 0}, 400, function(){});
+			$('.option').fadeOut(400);
+			$('.active').animate({'top': -60}, 400, function(){});
 
+
+			var suburl = $(this).data('subnav');
 			//load ejs template and insert html
-			var html = new EJS({url: 'body.ejs'}).render();
+			var html = new EJS({url: 'body.ejs'}).render(content[suburl]);
 			$('#content').html(html).fadeIn(600);
 
 			//load sub-navigation
-			var suburl = $(this).data('subnav');
 			var subnav = new EJS({url: 'subnav.ejs'}).render(links[suburl]);
-			$('#navigation').append(subnav);
+			$('.subnav').html(subnav).fadeIn(600);
 			
-			$('.active').on('click.return', (function(){	
+			$('.active').on('click.return', (function(){
+					$('.option').fadeIn(400);
 					$('.active').animate({
 						'top': p.top,
 						'left': p.left
@@ -75,8 +106,8 @@
 						$(this).trigger('mouseleave');
 					});
 					
+					$('.subnav').html('').fadeOut(100);
 					$('#content').fadeOut(400);
-					$('.option').animate({'opacity': 1}, 400, function(){});
 					$('.active').off('click.return');
 				}));		
 
@@ -114,6 +145,9 @@
                <li class='option' data-subnav='webdev'>web development</li>
                <li class='option' data-subnav='videos'>videos</li>
                <li class='option' data-subnav='resume'>resume</li>
+             </ul>
+             <ul class='subnav'>
+
              </ul>
            </div>
          </div>
